@@ -15,7 +15,9 @@ for s in sel:
 	
 	if '_l' in s: s = s.replace('_l','_r')
 	elif '_r' in s: s = s.replace('_r','_l')
-	s_mirror = ap.dictionary.getobject(s)
+	elif 'Left' in s: s = s.replace('Left','Right')
+	elif 'Right' in s: s = s.replace('Right','Left')
+	else: continue
 
 	obj_mirror = ap.dictionary.getobject(s)
 	ap.SetValue(obj_mirror.fullname + ".null.shadow_scaleX", sizeX)
