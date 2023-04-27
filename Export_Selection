@@ -1,0 +1,44 @@
+import json
+ap=Application
+path = r'G:\nauka\xsi2maya\sel.json'
+
+sel=[]
+typ='' 
+
+def save_json (comp_dict, path):
+	import json
+	json=json.dumps(comp_dict)
+	f=open(path,"w")
+	f.write(json)
+	f.close()	
+
+Application.SelectMembers("", "", "")
+try:
+	#user selected components - save their type and indices for single polymesh
+	oSel=ap.selection(0).SubComponent.ComponentCollection
+	oObj=oSel.SubComponent.Parent3dObject
+	SelType=oSel(0).type
+	print SelType
+	if SelType=='PolygonFace': typ='poly'
+	if SelType=='Edge': typ='edge'
+	if SelType=='Vertex': typ='pnt'
+	
+	for element in (oSel):
+		sel.append(element.index)
+		
+	mySel={'type':typ, 'index':sel}
+	
+except:
+	#user selecter multiple meshes - save their names
+	oSel=[x for x in ap.selection]
+	print oSel[0].type
+	if oSel[0].type == 'polymsh':
+		typ='polymesh'
+		oSel = [str(x.name) for x in oSel]
+		print oSel
+		
+	mySel = {'type':typ, 'names':oSel}
+	
+save_json (mySel, path)
+print ' Ready '
+	
